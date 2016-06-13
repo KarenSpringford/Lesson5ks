@@ -24,13 +24,13 @@
                 <asp:GridView runat="server" ID="StudentsGridView" AutoGenerateColumns="false"
                     CssClass="table table-bordered table-striped table-hover" DataKeyNames="StudentID"
                     OnRowDeleting="StudentsGridView_RowDeleting" AllowPaging="true" OnPageIndexChanging="StudentsGridView_PageIndexChanging"
-                    PageSize="3">
+                    PageSize="3" AllowSorting="true" OnSorting="StudentsGridView_Sorting" OnRowDataBound="StudentsGridView_RowDataBound">
                     <Columns>
-                        <asp:BoundField DataField="StudentID" HeaderText="Student ID" Visible="true" />
-                        <asp:BoundField DataField="LastName" HeaderText="Last Name" Visible="true" />
-                        <asp:BoundField DataField="FirstMidName" HeaderText="First Name" Visible="true" />
+                        <asp:BoundField DataField="StudentID" HeaderText="Student ID" Visible="true" SortExpression="StudentID" />
+                        <asp:BoundField DataField="LastName" HeaderText="Last Name" Visible="true" SortExpression="LastName" />
+                        <asp:BoundField DataField="FirstMidName" HeaderText="First Name" Visible="true" SortExpression="FirstMidName" />
                         <asp:BoundField DataField="EnrollmentDate" HeaderText="Enrollment Date" Visible="true"
-                            DataFormatString="{0:MMM dd, yyyy}" />
+                            DataFormatString="{0:MMM dd, yyyy}" SortExpression="EnrollmentDate" />
                         <asp:CommandField HeaderText="Delete" DeleteText="<i class='fa fa-trash-o fa-lg'></i> Delete" ShowDeleteButton="true" ButtonType="Link" ControlStyle-CssClass="btn btn-danger btn-sm" />
                     </Columns>
                 </asp:GridView>

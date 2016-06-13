@@ -21,12 +21,12 @@
 
                 <asp:GridView runat="server" ID="CoursesGridView" AutoGenerateColumns="false" CSSClass="table table-bordered table-striped table-hover" OnRowDeleting="CoursesGridView_RowDeleting"
                     AllowPaging="true" OnPageIndexChanging="CoursesGridView_PageIndexChanging" 
-                    PageSize="3">
+                    PageSize="3" AllowSorting="true" OnSorting="CoursesGridView_Sorting">
                     <Columns>
-                        <asp:BoundField DataField="CourseID" HeaderText="Course ID" Visible="true"/>
-                        <asp:BoundField DataField="Title" HeaderText="Title" Visible="true"/>
-                        <asp:BoundField DataField="Credits" HeaderText="Credits" Visible="true"/>
-                        <asp:BoundField DataField="DepartmentID" HeaderText="Department ID" Visible="true"/>
+                        <asp:BoundField DataField="CourseID" HeaderText="Course ID" Visible="true" SortExpression="CourseID"/>
+                        <asp:BoundField DataField="Title" HeaderText="Title" Visible="true" SortExpression="Title"/>
+                        <asp:BoundField DataField="Credits" HeaderText="Credits" Visible="true" SortExpression="Credits"/>
+                        <asp:BoundField DataField="DepartmentID" HeaderText="Department ID" Visible="true" SortExpression="DepartmentID"/>
                         <asp:CommandField HeaderText="Delete" DeleteText="<i class='fa fa-trash-o fa-lg'></i> Delete" ShowDeleteButton="true" ButtonType="Link" ControlStyle-CssClass="btn btn-danger btn-sm" />
                     </Columns>
                 </asp:GridView>

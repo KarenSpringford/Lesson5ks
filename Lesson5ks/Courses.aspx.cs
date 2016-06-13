@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 //using statements that are requuired to connect the the EF DB
 using Lesson5ks.Models;
 using System.Web.ModelBinding;
+using System.Linq.Dynamic;
 
 namespace Lesson5ks
 {
@@ -18,6 +19,10 @@ namespace Lesson5ks
             //if loading the page for the first time, populate the student grid
             if (!IsPostBack)
             {
+
+                Session["SortColumn"] = "CourseID";  //default sort column
+                Session["SortDirection"] = "ASC";     //added system.linq.dynamic
+
                 //get the student data
                 this.GetCourses();
             }
@@ -109,6 +114,19 @@ namespace Lesson5ks
 
             //refresh
             this.GetCourses();
+        }
+
+        protected void CoursesGridView_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            //get the columns to sort by
+            Session["SortColumn"] = e.SortExpression;
+
+            //refresh the grid
+            this.GetCourses();
+
+            //toggle the direction
+            Session["SortDiection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
+
         }
     }
 }

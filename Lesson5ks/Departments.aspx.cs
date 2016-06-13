@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 //using statements that are requuired to connect the the EF DB
 using Lesson5ks.Models;
 using System.Web.ModelBinding;
+using System.Linq.Dynamic;
 
 namespace Lesson5ks
 {
@@ -18,6 +19,10 @@ namespace Lesson5ks
             //if loading the page for the first time, populate the departments grid
             if (!IsPostBack)
             {
+
+                Session["SortColumn"] = "DepartmentID";  //default sort column
+                Session["SortDirection"] = "ASC";     //added system.linq.dynamic
+
                 //get the departments data
                 this.GetDepartments();
             }
@@ -99,6 +104,18 @@ namespace Lesson5ks
 
             //refresh
             this.GetDepartments();
+        }
+
+        protected void DepartmentsGridView_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            //get the columns to sort by
+            Session["SortColumn"] = e.SortExpression;
+
+            //refresh the grid
+            this.GetDepartments();
+
+            //toggle the direction
+            Session["SortDiection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
         }
     }
 }
