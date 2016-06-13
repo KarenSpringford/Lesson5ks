@@ -7,7 +7,19 @@
                 <h1>Departments</h1>
                 <br />
                 <a href="DepartmentDetails.aspx" class="btn btn-success btn-sm"><i class="fa fa-plus fa-lg"></i> Add Department</a>
-                <br />
+                
+                <div>
+                    <label for="PageSizeDropDownList">Records Per Page</label>
+                    <asp:DropDownList ID="PageSizeDropDownList" runat="server"
+                        AutoPostBack="true" CssClass="btn btn-default btn-small dropdown-toggle"
+                        OnSelectedIndexChanged="PageSizeDropDownList_SelectedIndexChanged">
+                        <asp:ListItem Text="3" Value="3" />
+                        <asp:ListItem Text="5" Value="5" />
+                        <asp:ListItem Text="10" Value="10" />
+                        <asp:ListItem Text="All" Value="10000" />
+                    </asp:DropDownList>
+                </div>
+
                 <asp:Gridview runat="server" AutoGenerateColumns="false" CSSClass="table table-bordered table-striped table-hover" 
                     ID="DepartmentsGridView" DataKeyNames="DepartmentID" OnRowDeleting="DepartmentsGridView_RowDeleting"
                     AllowPaging="true" OnPageIndexChanging="DepartmentsGridView_PageIndexChanging" 

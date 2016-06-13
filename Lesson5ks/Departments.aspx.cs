@@ -91,5 +91,14 @@ namespace Lesson5ks
             //refresh the grid
             this.GetDepartments();
         }
+
+        protected void PageSizeDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //set the new page size
+            DepartmentsGridView.PageSize = Convert.ToInt32(PageSizeDropDownList.SelectedValue);
+
+            //refresh
+            this.GetDepartments();
+        }
     }
 }

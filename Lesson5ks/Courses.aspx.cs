@@ -101,5 +101,14 @@ namespace Lesson5ks
             //refresh the grid
             this.GetCourses();
         }
+
+        protected void PageSizeDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //set the new page size
+            CoursesGridView.PageSize = Convert.ToInt32(PageSizeDropDownList.SelectedValue);
+
+            //refresh
+            this.GetCourses();
+        }
     }
 }

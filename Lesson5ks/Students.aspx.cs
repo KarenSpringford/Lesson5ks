@@ -101,5 +101,22 @@ namespace Lesson5ks
             //refresh the grid
             this.GetStudents();
         }
+
+        /**
+         * <summary>
+         * sets the new page size
+         * </summary>
+         * @method PageSizeDropDownList_SelectedIndexChanged
+         * */
+
+        protected void PageSizeDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //set the new page size
+            StudentsGridView.PageSize = Convert.ToInt32(PageSizeDropDownList.SelectedValue);
+
+            //refresh
+            this.GetStudents();
+
+        }
     }
 }

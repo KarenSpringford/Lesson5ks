@@ -5,7 +5,20 @@
             <div class="col-md-offset-2 col-md-8">
                 <h1>Course List</h1>
                 <a href="CourseDetails.aspx" class="btn btn-success btn-sm"><i class="fa fa-plus fa-lg"></i> Add Course</a>
-                <br />
+                
+
+                <div>
+                    <label for="PageSizeDropDownList">Records Per Page</label>
+                    <asp:DropDownList ID="PageSizeDropDownList" runat="server"
+                        AutoPostBack="true" CssClass="btn btn-default btn-small dropdown-toggle"
+                        OnSelectedIndexChanged="PageSizeDropDownList_SelectedIndexChanged">
+                        <asp:ListItem Text="3" Value="3" />
+                        <asp:ListItem Text="5" Value="5" />
+                        <asp:ListItem Text="10" Value="10" />
+                        <asp:ListItem Text="All" Value="10000" />
+                    </asp:DropDownList>
+                </div>
+
                 <asp:GridView runat="server" ID="CoursesGridView" AutoGenerateColumns="false" CSSClass="table table-bordered table-striped table-hover" OnRowDeleting="CoursesGridView_RowDeleting"
                     AllowPaging="true" OnPageIndexChanging="CoursesGridView_PageIndexChanging" 
                     PageSize="3">
