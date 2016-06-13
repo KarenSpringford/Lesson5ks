@@ -46,5 +46,60 @@ namespace Lesson5ks
                 CoursesGridView.DataBind();
             }
         }
+
+        /**
+ * <summary>
+ * This event handler deletes the course from the db using EF
+ * </summary>
+ * @method CoursesGridView_RowDeleting
+ * @param (GridViewDeletingEventArgs) e
+ * @returns (void)
+ * */
+
+        protected void CoursesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            //store which row was clicked for deletion
+            int selectedRow = e.RowIndex;
+
+            //get the selected studentID using the grids data key collection
+            int CourseID = Convert.ToInt32(CoursesGridView.DataKeys[selectedRow].Values["CourseID"]);
+
+            //use EF to find the selected student in the DB and remove it
+            using (DefaultConnection db = new DefaultConnection())
+            {
+                //create object of the student class and store the query string inside of it 
+                Course deletedCourse = (from CourseDetails in db.Courses
+                                        where CourseDetails.CourseID == CourseID
+                                        select CourseDetails).FirstOrDefault();
+
+                //remove the selected student from the db
+                db.Courses.Remove(deletedCourse);
+
+                //save the changes back to the database
+                db.SaveChanges();
+
+                //refresh the grid
+                this.GetCourses();
+            }
+        }
+
+        /**
+        * <summary>
+        * This event handler allows pagination for the gridview
+        * </summary>
+        * @method CoursesGridView_PageIndexChanging
+        * @param (object) sender
+        * @param (GridViewPageEventArgs) e
+        * @returns (void)
+        * */
+
+        protected void CoursesGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            //set the new pge number (index)
+            CoursesGridView.PageIndex = e.NewPageIndex;
+
+            //refresh the grid
+            this.GetCourses();
+        }
     }
 }

@@ -37,5 +37,59 @@ namespace Lesson5ks
                 DepartmentsGridView.DataBind();
             }
         }
+
+        /**
+         * <summary>
+         * This event handler deletes the Department from the db using EF
+         * </summary>
+         * @method DepartmentsGridView_RowDeleting
+         * @param (GridViewDeletingEventArgs) e
+         * @returns (void)
+         * */
+
+        protected void DepartmentsGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            //store which row was clicked for deletion
+            int selectedRow = e.RowIndex;
+
+            //get the selected studentID using the grids data key collection
+            int DepartmentID = Convert.ToInt32(DepartmentsGridView.DataKeys[selectedRow].Values["DepartmentID"]);
+
+            //use EF to find the selected student in the DB and remove it
+            using (DefaultConnection db = new DefaultConnection())
+            {
+                //create object of the student class and store the query string inside of it 
+                Department deletedDepartment = (from DepartmentDetails in db.Departments
+                                          where DepartmentDetails.DepartmentID == DepartmentID
+                                          select DepartmentDetails).FirstOrDefault();
+
+                //remove the selected student from the db
+                db.Departments.Remove(deletedDepartment);
+
+                //save the changes back to the database
+                db.SaveChanges();
+
+                //refresh the grid
+                this.GetDepartments();
+            }
+        }
+        /**
+         * <summary>
+         * This event handler allows pagination for the gridview
+         * </summary>
+         * @method DepartmentsGridView_PageIndexChanging
+         * @param (object) sender
+         * @param (GridViewPageEventArgs) e
+         * @returns (void)
+         * */
+
+        protected void DepartmentsGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            //set the new pge number (index)
+            DepartmentsGridView.PageIndex = e.NewPageIndex;
+
+            //refresh the grid
+            this.GetDepartments();
+        }
     }
 }
