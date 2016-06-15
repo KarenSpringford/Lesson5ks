@@ -23,11 +23,14 @@
                 <asp:Gridview runat="server" AutoGenerateColumns="false" CSSClass="table table-bordered table-striped table-hover" 
                     ID="DepartmentsGridView" DataKeyNames="DepartmentID" OnRowDeleting="DepartmentsGridView_RowDeleting"
                     AllowPaging="true" OnPageIndexChanging="DepartmentsGridView_PageIndexChanging" 
-                    PageSize="3" AllowSorting="true" OnSorting="DepartmentsGridView_Sorting">
+                    PageSize="3" AllowSorting="true" OnSorting="DepartmentsGridView_Sorting" OnRowDataBound="DepartmentsGridView_RowDataBound">
                     <Columns>
                         <asp:BoundField DataField="DepartmentID" HeaderText="Department ID" Visible="true" SortExpression="DepartmentID"/>
                         <asp:BoundField DataField="Name" HeaderText="Name" Visible="true" SortExpression="Name"/>
                         <asp:BoundField DataField="Budget" HeaderText="Budget" Visible="true" DataFormatString = "{0:C2}" SortExpression="Budget"/>
+                        <asp:HyperlinkField HeaderText="Edit" Text="<i class='fa fa-pencil-square-o fa-lg'></i> Edit" 
+                            NavigateUrl="~/DepartmentDetails.aspx.cs" ControlStyle-CssClass="btn btn-primary btn-sm" runat="server"
+                            DataNavigateUrlFields="DepartmentID" DataNavigateUrlFormatString="DepartmentDetails.aspx?DepartmentID={0}" />
                         <asp:CommandField HeaderText="Delete" DeleteText="<i class='fa fa-trash-o fa-lg'></i> Delete" ShowDeleteButton="true" ButtonType="Link" ControlStyle-CssClass="btn btn-danger btn-sm" />
                     </Columns>
                 </asp:Gridview>

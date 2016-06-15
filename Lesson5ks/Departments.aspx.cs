@@ -32,12 +32,15 @@ namespace Lesson5ks
             //connect to the EF
             using (DefaultConnection db = new DefaultConnection())
             {
+
+                string SortString = Session["SortColumn"].ToString() + " " + Session["SortDirection"].ToString();
+
                 //query the students table using EF and LINQ
                 var Departments = (from allDepartments in db.Departments
                                    select allDepartments);
 
                 //sends the data to a list
-                DepartmentsGridView.DataSource = Departments.ToList();
+                DepartmentsGridView.DataSource = Departments.AsQueryable().OrderBy(SortString).ToList();
                 //binds the data to the grid
                 DepartmentsGridView.DataBind();
             }
@@ -115,7 +118,34 @@ namespace Lesson5ks
             this.GetDepartments();
 
             //toggle the direction
-            Session["SortDiection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
+            Session["SortDirection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
+        }
+
+        protected void DepartmentsGridView_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (IsPostBack)
+            {
+                if (e.Row.RowType == DataControlRowType.Header)
+                {
+                    LinkButton linkButton = new LinkButton();
+
+                    for (int index = 0; index < DepartmentsGridView.Columns.Count - 1; index++)
+                    {
+                        if (DepartmentsGridView.Columns[index].SortExpression == Session["SortColumn"].ToString())
+                        {
+                            if (Session["SortDirection"].ToString() == "ASC")
+                            {
+                                linkButton.Text = "<i class='fa fa-caret-up fa-lg'></i>";
+                            }
+                            else
+                            {
+                                linkButton.Text = "<i class='fa fa-caret-down fa-lg'></i>";
+                            }
+                            e.Row.Cells[index].Controls.Add(linkButton);
+                        }
+                    }
+                }
+            }
         }
     }
 }

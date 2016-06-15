@@ -41,12 +41,15 @@ namespace Lesson5ks
             //connect to the EF
             using (DefaultConnection db = new DefaultConnection())
             {
+
+                string SortString = Session["SortColumn"].ToString() + " " + Session["SortDirection"].ToString();
+
                 //query the students table using EF and LINQ
                 var Courses = (from allCourses in db.Courses
                                select allCourses);
 
                 //sends the data to a list
-                CoursesGridView.DataSource = Courses.ToList();
+                CoursesGridView.DataSource = Courses.AsQueryable().OrderBy(SortString).ToList();
                 //binds the data to the grid
                 CoursesGridView.DataBind();
             }
@@ -125,8 +128,35 @@ namespace Lesson5ks
             this.GetCourses();
 
             //toggle the direction
-            Session["SortDiection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
+            Session["SortDirection"] = Session["SortDirection"].ToString() == "ASC" ? "DESC" : "ASC";
 
+        }
+
+        protected void CoursesGridView_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (IsPostBack)
+            {
+                if (e.Row.RowType == DataControlRowType.Header)
+                {
+                    LinkButton linkButton = new LinkButton();
+
+                    for (int index = 0; index < CoursesGridView.Columns.Count - 1; index++)
+                    {
+                        if (CoursesGridView.Columns[index].SortExpression == Session["SortColumn"].ToString())
+                        {
+                            if (Session["SortDirection"].ToString() == "ASC")
+                            {
+                                linkButton.Text = "<i class='fa fa-caret-up fa-lg'></i>";
+                            }
+                            else
+                            {
+                                linkButton.Text = "<i class='fa fa-caret-down fa-lg'></i>";
+                            }
+                            e.Row.Cells[index].Controls.Add(linkButton);
+                        }
+                    }
+                }
+            }
         }
     }
 }
