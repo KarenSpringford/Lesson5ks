@@ -15,7 +15,36 @@ namespace Lesson5ks
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if ((!IsPostBack) && (Request.QueryString.Count > 0))
+            {
+                this.GetCourse();
+            }
 
+        }
+
+        protected void GetCourse()
+        {
+            //populate the form with existing data from the db
+            int CourseID = Convert.ToInt32(Request.QueryString["CourseID"]);
+
+            //connect through the EF DB
+            using (DefaultConnection db = new DefaultConnection())
+            {
+                //populate a course object instance with the courseID from the url parameter
+                Course updatedCourse = (from course
+                                         in db.Courses
+                                          where course.CourseID == CourseID
+                                          select course).FirstOrDefault();
+
+                //map the course properties through the form controls
+                if (updatedCourse != null)
+                {
+                    //CourseIDTextBox.Text = Convert.ToInt32(updatedCourse.CourseIDTextBox.Text);
+                    TitleTextBox.Text = updatedCourse.Title;
+                    //CreditsTextBox.Text = Convert.ToInt32(updatedCourse.CreditsTextBox.Text);
+                    //DepartmentIDTextBox.Text = Convert.ToInt32(updatedCourse.DepartmentIDTextBox.Text);
+                }
+            }
         }
 
         protected void CancelButton_Click(object sender, EventArgs e)
@@ -34,18 +63,35 @@ namespace Lesson5ks
                 //save a new record
                 Course newCourse = new Course();
 
+                int CourseID = 0;
+
+                if (Request.QueryString.Count > 0) //our URL has a courseID in it 
+                {
+                    //get the id from the URL
+                    CourseID = Convert.ToInt32(Request.QueryString["CourseID"]);
+
+                    //get the current course from the EF DB
+                    newCourse = (from course in db.Courses
+                                  where course.CourseID == CourseID
+                                  select course).FirstOrDefault();
+                }
+
+
                 //add data to the new Course record
                 newCourse.Title = TitleTextBox.Text;
                 newCourse.Credits = Convert.ToInt32(CreditsTextBox.Text);
                 newCourse.DepartmentID = Convert.ToInt32(DepartmentIDTextBox);
 
                 //use LINQ to ADO.net to add / insert my new Course into the DB
-                db.Courses.Add(newCourse);
+                if (CourseID == 0)
+                {
+                    db.Courses.Add(newCourse);
+                }
 
-                //save our changes
+                //save our changes / also updates and inserts
                 db.SaveChanges();
 
-                //redirect back to the updated Students page
+                //redirect back to the updated Courses page
                 Response.Redirect("~/Courses.aspx");
 
 

@@ -15,6 +15,35 @@ namespace Lesson5ks
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if ((!IsPostBack) && (Request.QueryString.Count > 0))
+            {
+                this.GetDepartment();
+            }
+        }
+
+        protected void GetDepartment()
+        {
+            //populate the form with existing data from the db
+            int DepartmentID = Convert.ToInt32(Request.QueryString["DepartmentID"]);
+
+            //connect through the EF DB
+            using (DefaultConnection db = new DefaultConnection())
+            {
+                //populate a department object instance with the departmentID from the url parameter
+                Department updatedDepartment = (from Departments
+                                         in db.Departments
+                                        where Departments.DepartmentID == DepartmentID
+                                        select Departments).FirstOrDefault();
+
+                //map the department properties through the form controls
+                if (updatedDepartment != null)
+                {
+                    //DepartmentIDTextBox.Text = Convert.ToInt32(updatedDepartment.DepartmentIDTextBox.Text);
+                    //DepartmentTextBox.Text = updatedDepartment.DepartmentTextBox.Text;
+                    //BudgetTextBox.Text = Convert.ToDecimal(updatedDepartment.BudgetTextBox.Text);
+                    
+                }
+            }
 
         }
 
@@ -33,17 +62,33 @@ namespace Lesson5ks
                 //save a new record
                 Department newDepartment = new Department();
 
+                int DepartmentID = 0;
+
+                if (Request.QueryString.Count > 0) //our URL has a studentId in it 
+                {
+                    //get the id from the URL
+                    DepartmentID = Convert.ToInt32(Request.QueryString["DepartmentID"]);
+
+                    //get the current student from the EF DB
+                    newDepartment = (from department in db.Departments
+                                  where department.DepartmentID == DepartmentID
+                                  select department).FirstOrDefault();
+                }
+
                 //add data to the new Department record
                 newDepartment.Name = DepartmentTextBox.Text;
                 newDepartment.Budget = Convert.ToInt32(BudgetTextBox.Text);
 
-                //use LINQ to ADO.net to add / insert my new Student into the DB
-                db.Departments.Add(newDepartment);
+                //use LINQ to ADO.net to add / insert my new Department into the DB
+                if (DepartmentID == 0)
+                {
+                    db.Departments.Add(newDepartment);
+                }
 
-                //save our changes
+                //save our changes / also updates and inserts
                 db.SaveChanges();
 
-                //redirect back to the updated Students page
+                //redirect back to the updated Departments page
                 Response.Redirect("~/Departments.aspx");
             }
         }
